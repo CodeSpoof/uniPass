@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">Univention Password Manager</string>
+    <string name="reset">Reset</string>
+    <string name="repair">Repair</string>
+    <string name="history">History</string>
+    <string name="hint_password">Password</string>
+    <string name="datetime">Datetime</string>
+    <string name="password">Password</string>
+    <string name="db_error">Database Error</string>
+    <string name="history_empty">History empty. Please repair!</string>
+    <string name="network_error">Network Error</string>
+</resources>
