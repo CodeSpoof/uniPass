@@ -3,7 +3,6 @@ package io.codespoof.univpassm;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.AsyncTask;
-import android.util.JsonReader;
 import android.util.Log;
 import android.widget.EditText;
 import android.widget.SimpleCursorAdapter;
@@ -22,7 +21,6 @@ import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.Iterator;
 import java.util.Objects;
-import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -39,6 +37,7 @@ public class ChangePasswordTask extends AsyncTask<Void, Void, Boolean> {
     private Context context;
     private final DBManager dbManager;
     private final SimpleCursorAdapter adapter;
+    @SuppressLint("StaticFieldLeak")
     private final EditText editPassword;
     private final Pattern cookiePattern = Pattern.compile("(?:^|; )UMCSessionId=([^;]+)");
     private long id = -1;
@@ -63,17 +62,6 @@ public class ChangePasswordTask extends AsyncTask<Void, Void, Boolean> {
         Log.i("bg", "New: " + newPassword);
     }
 
-    private static String readString(InputStream inputStream) throws IOException {
-
-        ByteArrayOutputStream into = new ByteArrayOutputStream();
-        byte[] buf = new byte[4096];
-        for (int n; 0 < (n = inputStream.read(buf));) {
-            into.write(buf, 0, n);
-        }
-        into.close();
-        return new String(into.toByteArray(), StandardCharsets.UTF_8); // Or whatever encoding
-    }
-
     private String createConnection(String path, String body, String cookies) throws IOException, JSONException {
         URL endpoint;
         try {
@@ -93,20 +81,15 @@ public class ChangePasswordTask extends AsyncTask<Void, Void, Boolean> {
         myConnection.setDoOutput(true);
         myConnection.getOutputStream().write(body.getBytes());
         if (myConnection.getResponseCode() != 200) {
-            InputStream responseBody = myConnection.getInputStream();
-            String result = readString(responseBody);
             return null;
         }
-
-        InputStream responseBody = myConnection.getInputStream();
-        //Scanner sc = new Scanner(responseBody).useDelimiter("\\A");
         BufferedReader br = new BufferedReader(new InputStreamReader(myConnection.getInputStream(), StandardCharsets.UTF_8));
         StringBuilder response = new StringBuilder();
-        String responseLine = null;
+        String responseLine;
         while ((responseLine = br.readLine()) != null) {
             response.append(responseLine.trim());
         }
-        System.out.println(response.toString());
+        System.out.println(response);
         String responseText = response.toString();
         JSONObject json = new JSONObject(responseText);
         for (Iterator<String> it = json.keys(); it.hasNext(); ) {

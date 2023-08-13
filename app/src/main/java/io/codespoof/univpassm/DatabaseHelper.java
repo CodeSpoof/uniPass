@@ -6,21 +6,12 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
 
-    // Table Name
     public static final String TABLE_NAME = "passes";
-
-    // Table columns
     public static final String _ID = "_id";
     public static final String DATETIME = "datetime";
     public static final String CONTENT = "content";
-
-    // Database Information
-    static final String DB_NAME = "JOURNALDEV_COUNTRIES.DB";
-
-    // database version
+    static final String DB_NAME = "History.db";
     static final int DB_VERSION = 1;
-
-    // Creating table query
     private static final String CREATE_TABLE = "create table " + TABLE_NAME + "(" + _ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + DATETIME + " DATETIME UNIQUE DEFAULT CURRENT_TIMESTAMP, " + CONTENT + " TEXT);";
 
     public DatabaseHelper(Context context) {

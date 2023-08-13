@@ -5,7 +5,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.text.InputType;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -13,7 +12,6 @@ import android.widget.SimpleCursorAdapter;
 import android.widget.Toast;
 
 import java.security.NoSuchAlgorithmException;
-import java.security.NoSuchProviderException;
 import java.security.SecureRandom;
 
 public class MainActivity extends AppCompatActivity {
@@ -132,5 +130,11 @@ public class MainActivity extends AppCompatActivity {
                 editPassword.setInputType(InputType.TYPE_TEXT_VARIATION_PASSWORD);
             }
         });
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        dbManager.close();
     }
 }
