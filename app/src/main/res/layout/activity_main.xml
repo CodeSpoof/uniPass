@@ -17,20 +17,20 @@
         android:enabled="false"
         android:fontFamily="sans-serif"
         android:hint="@string/hint_password"
+        android:importantForAutofill="no"
         android:inputType="text|textVisiblePassword"
         android:maxWidth="10dp"
         android:singleLine="true"
         android:textAlignment="center"
         android:textAllCaps="false"
-        android:textSize="30sp"
+        android:textSize="24sp"
         android:textStyle="bold"
         android:typeface="normal"
         app:layout_constraintBottom_toTopOf="@id/cardButtons"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_chainStyle="packed"
-        android:importantForAutofill="no" />
+        app:layout_constraintVertical_chainStyle="packed" />
 
     <ListView
         android:id="@+id/listHistory"
@@ -97,5 +97,15 @@
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="@id/listHistory"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/buttonSettings"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:text="@string/button_settings"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cardButtons" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

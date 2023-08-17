@@ -1,7 +1,7 @@
 package io.codespoof.univpassm;
 
-import androidx.appcompat.app.AppCompatActivity;
-
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.text.InputType;
@@ -11,8 +11,8 @@ import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.Toast;
 
-import java.security.NoSuchAlgorithmException;
-import java.security.SecureRandom;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.preference.PreferenceManager;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -22,38 +22,7 @@ public class MainActivity extends AppCompatActivity {
 
     final int[] to = new int[] {R.id.datetime, R.id.content};
 
-    private String generatePassword() {
-        StringBuilder pool = new StringBuilder();
-        String chars = "abcdefghijklmnopqrstuvwxyz";
-        String signs = ".,-_:#*+=!";
-        String numbers = "0123456789";
-        SecureRandom secureRandomGenerator;
-        try {
-            secureRandomGenerator = SecureRandom.getInstance("SHA1PRNG");
-        } catch (NoSuchAlgorithmException e) {
-            throw new RuntimeException(e);
-        }
-        int upper = 0;
-        for (int i = 0; i < 5; i++) {
-            String c = chars.substring(secureRandomGenerator.nextInt(chars.length())).substring(0, 1);
-            if (upper < 4 && secureRandomGenerator.nextBoolean()) {
-                c = c.toUpperCase();
-                upper++;
-            }
-            pool.append(c);
-        }
-        pool.append(signs.charAt(secureRandomGenerator.nextInt(signs.length())));
-        pool.append(numbers.charAt(secureRandomGenerator.nextInt(numbers.length())));
-        pool.append(numbers.charAt(secureRandomGenerator.nextInt(numbers.length())));
-
-        StringBuilder ret = new StringBuilder();
-        for (int i = 0; i < 8; i++) {
-            int ind = secureRandomGenerator.nextInt(pool.length());
-            ret.append(pool.charAt(ind));
-            pool.deleteCharAt(ind);
-        }
-        return ret.toString();
-    }
+    PasswordGenerator generator;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,16 +44,21 @@ public class MainActivity extends AppCompatActivity {
 
         listView.setAdapter(adapter);
 
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+
+        generator = new PasswordGenerator(preferences.getBoolean("pref_url_compat", false), Integer.parseInt(preferences.getString("pref_level", "10")));
+
         EditText editPassword = findViewById(R.id.editPassword);
         Button resetButton = findViewById(R.id.buttonReset);
         Button repairButton = findViewById(R.id.buttonRepair);
+        Button settingsButton = findViewById(R.id.buttonSettings);
         resetButton.setOnClickListener(v -> {
             Cursor c = dbManager.fetch();
             c.moveToFirst();
             if (c.getCount() > 0) {
                 String oldPass = c.getString(2);
-                String newPass = generatePassword();
-                ChangePasswordTask task = new ChangePasswordTask("chrsal2", oldPass, newPass, "login.schulen-wetteraukreis.de", getApplicationContext(), dbManager, adapter, editPassword, repairButton, resetButton);
+                String newPass = generator.generatePassword();
+                ChangePasswordTask task = new ChangePasswordTask(preferences.getString("pref_username", ""), oldPass, newPass, preferences.getString("pref_server_address", ""), getApplicationContext(), dbManager, adapter, editPassword, repairButton, resetButton);
                 task.execute();
             } else {
                 Toast.makeText(getApplicationContext(), R.string.history_empty, Toast.LENGTH_LONG).show();
@@ -108,6 +82,9 @@ public class MainActivity extends AppCompatActivity {
                 editPassword.setInputType(InputType.TYPE_TEXT_VARIATION_PASSWORD);
             }
         });
+        settingsButton.setOnClickListener(v -> startActivity(new Intent(this, SettingsActivity.class)));
+        if (preferences.getString("pref_username", "").equals(""))
+            startActivity(new Intent(this, SettingsActivity.class));
     }
 
     @Override
