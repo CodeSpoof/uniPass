@@ -23,7 +23,7 @@ public class MainActivity extends AppCompatActivity {
     final int[] to = new int[] {R.id.datetime, R.id.content};
 
     private String generatePassword() {
-        StringBuilder ret = new StringBuilder();
+        StringBuilder pool = new StringBuilder();
         String chars = "abcdefghijklmnopqrstuvwxyz";
         String signs = ".,-_:#*+=!";
         String numbers = "0123456789";
@@ -33,50 +33,24 @@ public class MainActivity extends AppCompatActivity {
         } catch (NoSuchAlgorithmException e) {
             throw new RuntimeException(e);
         }
-        for (int i = 0; i < 8; i++) {
-            ret.append(chars.charAt(secureRandomGenerator.nextInt(chars.length())));
-        }
-        int cap = secureRandomGenerator.nextInt(255)+1;
         int upper = 0;
-        for (int i = 0; i < 8; i++) {
-            if (((cap >> i) & 1) > 0) {
-                ret.replace(i, i+1, (ret.substring(i,i+1)).toUpperCase());
+        for (int i = 0; i < 5; i++) {
+            String c = chars.substring(secureRandomGenerator.nextInt(chars.length())).substring(0, 1);
+            if (upper < 4 && secureRandomGenerator.nextBoolean()) {
+                c = c.toUpperCase();
                 upper++;
             }
+            pool.append(c);
         }
-        int done = 0;
-        while (done < 1) {
-            for (int i = 0; i < 8; i++) {
-                if (ret.substring(i, i + 1).toLowerCase().equals(ret.substring(i, i + 1)) ^ upper > 4) {
-                    if (secureRandomGenerator.nextBoolean()) continue;
-                    done++;
-                    int ran = secureRandomGenerator.nextInt(signs.length());
-                    ret.replace(i, i+1, signs.substring(ran, ran+1));
-                    if (upper > 4) {
-                        upper--;
-                    } else {
-                        upper++;
-                    }
-                    break;
-                }
-            }
-        }
-        done = 0;
-        while (done < 2) {
-            for (int i = 0; i < 8; i++) {
-                if ((ret.substring(i, i + 1).toLowerCase().equals(ret.substring(i, i + 1)) ^ upper > 4) && chars.contains(ret.substring(i, i + 1).toLowerCase())) {
-                    if (secureRandomGenerator.nextBoolean()) continue;
-                    done++;
-                    int ran = secureRandomGenerator.nextInt(numbers.length());
-                    ret.replace(i, i+1, numbers.substring(ran, ran+1));
-                    if (upper > 4) {
-                        upper--;
-                    } else {
-                        upper++;
-                    }
-                    break;
-                }
-            }
+        pool.append(signs.charAt(secureRandomGenerator.nextInt(signs.length())));
+        pool.append(numbers.charAt(secureRandomGenerator.nextInt(numbers.length())));
+        pool.append(numbers.charAt(secureRandomGenerator.nextInt(numbers.length())));
+
+        StringBuilder ret = new StringBuilder();
+        for (int i = 0; i < 8; i++) {
+            int ind = secureRandomGenerator.nextInt(pool.length());
+            ret.append(pool.charAt(ind));
+            pool.deleteCharAt(ind);
         }
         return ret.toString();
     }
