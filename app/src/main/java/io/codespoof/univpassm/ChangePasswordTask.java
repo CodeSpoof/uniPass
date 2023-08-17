@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.SimpleCursorAdapter;
 import android.widget.Toast;
@@ -12,9 +13,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -39,10 +38,12 @@ public class ChangePasswordTask extends AsyncTask<Void, Void, Boolean> {
     private final SimpleCursorAdapter adapter;
     @SuppressLint("StaticFieldLeak")
     private final EditText editPassword;
+    private final Button repairButton;
+    private final Button resetButton;
     private final Pattern cookiePattern = Pattern.compile("(?:^|; )UMCSessionId=([^;]+)");
     private long id = -1;
 
-    public ChangePasswordTask(String username, String oldPassword, String newPassword, String host, Context context, DBManager dbManager, SimpleCursorAdapter adapter, EditText editPassword) {
+    public ChangePasswordTask(String username, String oldPassword, String newPassword, String host, Context context, DBManager dbManager, SimpleCursorAdapter adapter, EditText editPassword, Button repairButton, Button resetButton) {
         this.username = username;
         this.newPassword = newPassword;
         this.oldPassword = oldPassword;
@@ -51,11 +52,14 @@ public class ChangePasswordTask extends AsyncTask<Void, Void, Boolean> {
         this.dbManager = dbManager;
         this.adapter = adapter;
         this.editPassword = editPassword;
+        this.repairButton = repairButton;
+        this.resetButton = resetButton;
     }
 
     @Override
     protected void onPreExecute() {
         super.onPreExecute();
+        doWithButtons(false);
         id = dbManager.insert(newPassword);
         if (id < 0) this.cancel(true);
         Log.i("bg", "Old: " + oldPassword);
@@ -127,9 +131,15 @@ public class ChangePasswordTask extends AsyncTask<Void, Void, Boolean> {
         }
     }
 
+    private void doWithButtons(boolean enabled) {
+        repairButton.setEnabled(enabled);
+        resetButton.setEnabled(enabled);
+    }
+
     @Override
     protected void onPostExecute(Boolean success) {
         super.onPostExecute(success);
+        doWithButtons(true);
         if (!success) {
             Toast.makeText(context, R.string.network_error, Toast.LENGTH_SHORT).show();
             dbManager.delete(id);
@@ -145,6 +155,7 @@ public class ChangePasswordTask extends AsyncTask<Void, Void, Boolean> {
     @Override
     protected void onCancelled() {
         super.onCancelled();
+        doWithButtons(true);
         dbManager.delete(id);
         Toast.makeText(context, R.string.db_error, Toast.LENGTH_SHORT).show();
     }

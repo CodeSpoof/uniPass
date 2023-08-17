@@ -102,31 +102,35 @@ public class MainActivity extends AppCompatActivity {
         listView.setAdapter(adapter);
 
         EditText editPassword = findViewById(R.id.editPassword);
-
         Button resetButton = findViewById(R.id.buttonReset);
+        Button repairButton = findViewById(R.id.buttonRepair);
         resetButton.setOnClickListener(v -> {
             Cursor c = dbManager.fetch();
             c.moveToFirst();
             if (c.getCount() > 0) {
                 String oldPass = c.getString(2);
                 String newPass = generatePassword();
-                ChangePasswordTask task = new ChangePasswordTask("chrsal2", oldPass, newPass, "login.schulen-wetteraukreis.de", getApplicationContext(), dbManager, adapter, editPassword);
+                ChangePasswordTask task = new ChangePasswordTask("chrsal2", oldPass, newPass, "login.schulen-wetteraukreis.de", getApplicationContext(), dbManager, adapter, editPassword, repairButton, resetButton);
                 task.execute();
             } else {
                 Toast.makeText(getApplicationContext(), R.string.history_empty, Toast.LENGTH_LONG).show();
             }
             c.close();
         });
-        Button repairButton = findViewById(R.id.buttonRepair);
         repairButton.setOnClickListener(v -> {
             if (editPassword.isEnabled()) {
+                repairButton.setText(R.string.repair);
+                resetButton.setEnabled(true);
                 dbManager.insert(String.valueOf(editPassword.getText()));
                 adapter.changeCursor(dbManager.fetch());
                 adapter.notifyDataSetChanged();
                 editPassword.setEnabled(false);
                 editPassword.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
             } else {
+                repairButton.setText(R.string.repair_ok);
+                resetButton.setEnabled(false);
                 editPassword.setEnabled(true);
+                editPassword.setText("");
                 editPassword.setInputType(InputType.TYPE_TEXT_VARIATION_PASSWORD);
             }
         });
