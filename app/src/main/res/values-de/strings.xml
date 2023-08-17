@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="reset">Neu</string>
+    <string name="repair">Reparatur</string>
+    <string name="history">Verlauf</string>
+    <string name="hint_password">Passwort</string>
+    <string name="datetime">Zeitstempel</string>
+    <string name="password">Passwort</string>
+    <string name="db_error">Datenbank-Fehler</string>
+    <string name="history_empty">Verlauf leer. Bitte zuerst reparieren</string>
+    <string name="network_error">Netzwerkfehler</string>
+    <string name="repair_ok">Speichern</string>
+    <string name="title_activity_settings">Einstellungen</string>
+    <string name="settings_auth">Serveraddresse und Anmeldedaten</string>
+    <string name="settings_username">Nutzername</string>
+    <string name="settings_server_address">Serveraddresse</string>
+    <string name="settings_generation">Passwort-Generator</string>
+    <string name="settings_url_compat">URL-Kompatibilität sicherstellen</string>
+    <string name="settings_level">Sicherheitsstufe</string>
+    <string name="pref_strength_minimum">Minimal</string>
+    <string name="pref_strength_normal">Normal</string>
+    <string name="pref_strength_advanced">Fortgeschritten</string>
+    <string name="pref_strength_strong">Stark</string>
+    <string name="pref_strength_extremely_strong">Sehr stark</string>
+    <string name="settings_security">Sicherheit</string>
+    <string name="settings_require_authentication">Authentifizierung verlangen</string>
+    <string name="button_settings">Einstellungen</string>
+    <string name="auth_title">Biometrische Anmeldung</string>
+    <string name="auth_subtitle">Anmeldung zum Entsperren erforderlich</string>
+    <string name="settings_restart">Anwendung neustarten um Änderungen anzuwenden</string>
+    <string name="auth_error">Authentifizierungs-Fehler</string>
+</resources>
