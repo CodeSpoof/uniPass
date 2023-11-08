@@ -80,12 +80,18 @@ public class ChangePasswordTask extends AsyncTask<Void, Void, Boolean> {
         if (cookies != null) {
             myConnection.setRequestProperty("Cookie", cookies);
             final Matcher matcher = cookiePattern.matcher(cookies);
-            if (matcher.find()) myConnection.setRequestProperty("X-Xsrf-Protection", matcher.group(1));
+            if (matcher.find())
+                myConnection.setRequestProperty("X-Xsrf-Protection", matcher.group(1));
         }
         myConnection.setDoOutput(true);
         myConnection.getOutputStream().write(body.getBytes());
-        if (myConnection.getResponseCode() != 200) {
-            return null;
+        switch (myConnection.getResponseCode()) {
+            case 200:
+                break;
+            case 301 | 302 | 303 | 307 | 308:
+                return createConnection(myConnection.getHeaderField("Location"), body, cookies);
+            default:
+                return null;
         }
         BufferedReader br = new BufferedReader(new InputStreamReader(myConnection.getInputStream(), StandardCharsets.UTF_8));
         StringBuilder response = new StringBuilder();
