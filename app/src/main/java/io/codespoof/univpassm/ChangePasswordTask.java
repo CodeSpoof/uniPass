@@ -124,7 +124,7 @@ public class ChangePasswordTask extends AsyncTask<Void, Void, Boolean> {
         try {
             String result = createConnection("/univention/auth", "{\"options\":{\"username\":\"" + username + "\",\"password\":\"" + oldPassword + "\"}}", null);
             if (result != null) {
-                return createConnection("/univention/set", "{\"options\":{\"password\":{\"username\":\"" + username + "\",\"password\":\"" + oldPassword + "\",\"new_password\":\"" + newPassword + "\"}}}", result) != null;
+                return createConnection("/univention/set/password", "{\"options\":{\"password\":{\"password\":\"" + oldPassword + "\",\"new_password\":\"" + newPassword + "\"}}}", result) != null;
             } else return false;
         } catch (IOException | JSONException e) {
             return false;
