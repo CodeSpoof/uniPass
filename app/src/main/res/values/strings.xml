@@ -29,4 +29,5 @@
     <string name="auth_subtitle">Login required to unlock app</string>
     <string name="settings_restart">Restart the app to apply changes</string>
     <string name="auth_error">Authentification error</string>
+    <string name="settings_url_compat_summary">Generate only passwords which can be used in a url scheme without escaping characters</string>
 </resources>

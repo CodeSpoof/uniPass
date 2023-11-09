@@ -29,4 +29,5 @@
     <string name="auth_subtitle">Anmeldung zum Entsperren erforderlich</string>
     <string name="settings_restart">Anwendung neustarten um Änderungen anzuwenden</string>
     <string name="auth_error">Authentifizierungs-Fehler</string>
+    <string name="settings_url_compat_summary">Nur Passwörter generieren, die ohne Escapes in einem URL schema verwendet werden können</string>
 </resources>

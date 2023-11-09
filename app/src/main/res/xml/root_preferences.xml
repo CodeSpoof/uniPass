@@ -31,7 +31,8 @@
             android:layout_height="wrap_content"
             android:defaultValue="false"
             android:title="@string/settings_url_compat"
-            app:key="pref_url_compat" />
+            app:key="pref_url_compat"
+            app:summary="@string/settings_url_compat_summary" />
         <ListPreference
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
