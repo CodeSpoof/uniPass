@@ -1,6 +1,8 @@
 # uniPass
 A password manager and changer for the univention corporate server software
 
+[![swift-version](https://img.shields.io/endpoint?url=https://apt.izzysoft.de/fdroid/api/v1/shield/io.codespoof.univpassm )](https://apt.izzysoft.de/packages/io.codespoof.univpassm/)
+
 To avoid tedious tasks like regularly changing one's password, this app allows the user to change it directly on their mobile phone with one click. This results not only in less effort for the individual user, but also in more secure passwords. These are in fact randomly generated according to the criteria set by the UCS.
 
 ## Features
