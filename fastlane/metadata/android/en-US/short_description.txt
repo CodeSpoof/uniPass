@@ -1,0 +1,1 @@
+A password manager for the Univention Corporate Server
