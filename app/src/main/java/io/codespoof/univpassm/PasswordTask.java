@@ -83,10 +83,16 @@ public abstract class PasswordTask extends AsyncTask<Void, Void, Boolean> {
     }
 
     protected String doAuth(String username, String password) throws JSONException, IOException {
-        return createConnection("/univention/auth", "{\"options\":{\"username\":\"" + username + "\",\"password\":\"" + password + "\"}}", null);
+        JSONObject json = new JSONObject("{\"options\":{\"username\":\"\",\"password\":\"\"}}");
+        json.getJSONObject("options").put("username", username);
+        json.getJSONObject("options").put("password", password);
+        return createConnection("/univention/auth", json.toString(), null);
     }
 
     protected boolean doChange(String oldPassword, String newPassword, String cookies) throws JSONException, IOException {
-        return createConnection("/univention/set/password", "{\"options\":{\"password\":{\"password\":\"" + oldPassword + "\",\"new_password\":\"" + newPassword + "\"}}}", cookies) != null;
+        JSONObject json = new JSONObject("{\"options\":{\"password\":{\"password\":\"\",\"new_password\":\"\"}}}");
+        json.getJSONObject("options").getJSONObject("password").put("password", oldPassword);
+        json.getJSONObject("options").getJSONObject("password").put("new_password", newPassword);
+        return createConnection("/univention/set/password", json.toString(), cookies) != null;
     }
 }
